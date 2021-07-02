@@ -4,13 +4,15 @@
 \name{dom.data}
 \alias{dom.data}
 \title{dom.data}
-\format{List of 16 elements
+\format{
+List of 16 elements
   \describe{
     \item{matrix}{List of matrices of dominance interactions}
     \item{fileid}{File identifier associated with each matrix. Format is Author_Year}
     \item{taxon}{Broad taxonomic category for species}
     \item{and so on}{...}
-  }}
+  }
+}
 \usage{
 dom.data
 }
