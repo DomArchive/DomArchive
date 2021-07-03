@@ -61,11 +61,42 @@ Here is a summary of the metadata associated with each datafile:
 |age            | What age classes                  | "Adult", "Non-Adult", "Mixed"
 |measure        | What behavior was measured?       |
 |matrix_location|                                   |
-|rawbinary      | Are data raw counts or binary?    | "binarized", "raw"
+|countbinary    | Are data raw counts or binary?    | "count", "binary"
+|GroupID        | Unique identifier for social group|
 
+Additionally, metadata includes some quantities calculated from the interaction data. 
+Calculations were made using functions in the `compete` package (https://github.com/jalapic/compete). 
+
+|Quantity                    | Details                           
+|----------------------------|------------------------------------
+|number_individuals          | Number of individuals in the data
+|number_interactions         | Number of interactions in the data
+|interactions_per_individual | Number of interactions per individual
+|proportion_unknown          | Proportion of relationships for which there are no observations
+|dci                         | Directional consistency index (Van Hooff & Wensing 1987)
+|ttri                        | Triangle transitivity index (Shizuka & McDonald 2012)
+|ds_steepness                | Hierarchy steepness calculated from David's Scores (de Vries et al 2006)
+|modified_landaus_h          | Modified Landau's h` measure of linearity (de Vries 1995)
 
 ## Subsetting using subset_archive()
 
 
 
 ## Example analysis
+
+## References
+Schjelderup-Ebbe, T. (1922). Beitrage zur sozialpsychologie des haushuhns. Zeitschrift Fur Psychologie Und Physiologie Der Sinnesorgane, 88, 225–252.
+
+Curley, J. compete: Analyzing Social Hierarchies. R package 
+version 0.1. https://github.com/jalapic/compete
+
+Van Hooff, J., Wensing J.A.B. (1987). Dominance and its behavioural measures in a captive wolf pack. In: Frank H.W., editor. Man and Wolf. Dordrecht, Olanda (Netherlands): Junk Publishers pp.219-252.
+
+Shizuka, D., & McDonald, D. B. (2012). A social network perspective on measurements of dominance hierarchies. Animal Behaviour, 83(4), 925–934. http://dx.doi.org/10.1016/j.anbehav.2012.01.011
+
+de Vries, H., Stevens, J. M. G., & Vervaecke, H. (2006). Measuring and testing the steepness of dominance hierarchies. Animal Behaviour, 71(3), 585–592. http://webhost.ua.ac.be/crc/pdfs/DeVriesAB2006.pdf
+
+de Vries, H. (1995). An improved test of linearity in dominance hierarchies containing unknown or tied relationships. Animal Behaviour, 50(5), 1375–1389. http://www.sciencedirect.com/science/article/pii/0003347295800530
+
+
+
