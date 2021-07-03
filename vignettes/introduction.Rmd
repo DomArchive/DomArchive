@@ -2,7 +2,7 @@
 title: "Intoduction to DomArchive"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How-to}
+  %\VignetteIndexEntry{Intoduction to DomArchive}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
