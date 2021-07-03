@@ -34,7 +34,7 @@ As an example, here is how to extract the sociomatrix and metadata associated wi
 1922 paper: 
 
 ```{r}
-devtools::load_all()
+library(DomArchive)
 data(dom.data)
 data(dom.metadata)
 ## Extract sociomatrix
@@ -62,7 +62,7 @@ Here is a summary of the metadata associated with each datafile:
 |measure        | What behavior was measured?       |
 |matrix_location|                                   |
 |countbinary    | Are data raw counts or binary?    | "count", "binary"
-|GroupID        | Unique identifier for social group|
+|groupid        | Unique identifier for social group|
 
 Additionally, metadata includes some quantities calculated from the interaction data. 
 Calculations were made using functions in the `compete` package (https://github.com/jalapic/compete). 
@@ -80,9 +80,85 @@ Calculations were made using functions in the `compete` package (https://github.
 
 ## Subsetting using subset_archive()
 
+`DomArchive` includes one function for interacting with the data objects. The 
+`subset_archive()` function allows users to extract specific data elements from
+`dom.data`. There are two ways users can specify which data they would like to retain. 
 
+1. Users can provide a vector of fileids. `subset_archive()` will return data associated with
+those fileids. 
+
+2. Users can provide a list of column names and a list of values to be matched in those columns. 
+`subset_archive()` will return all rows where the column includes the provided values. To specify multiple
+restriction criteria, users can provide`column` and `value` as lists, and the
+each column is matched to the corresponding value(s) (i.e., check that for each row `column[n] %in% values[n]`).
+
+If both `fileids` and `column`/`values` are supplied, only `fileids` will be used. 
+Additionally, the `return.intxdata.only` flag can be used to make `subset_archive()`
+return only interaction data instead of interaction data and metadata. If users
+would like to do this on their own, this flag is the equivalent of using `map` from
+`purrr` to select only the data matrices: 
+
+`purrr::map(dom.data, 'matrix')`
+
+For more details, see Example analysis or ?subset_archive(). 
 
 ## Example analysis
+
+Here we are interested in how directional consistency differs between natural primate
+groups and wild primate groups. Does housing primates in captivity influence the 
+structure of social hierarchies? We have an intuition that directional consistency
+might be influenced by group size, so we will want to control for group size in our 
+analysis. For this example we will use the matrix data directly, although 
+this information is already contained in `dom.metadata`. 
+
+First, we will restrict the dataset to only primates using the `taxon` column. Here we
+do this with `subset_archive()` using both approaches described above. 
+
+```{r}
+## Option 1 - using fileids
+captive.fileids <- dplyr::filter(dom.metadata, taxon == 'Primate', captivity == 'Captive')$fileid
+primates.captive <- subset_archive(fileids = captive.fileids, return.intxdata.only = TRUE)
+natural.fileids <- dplyr::filter(dom.metadata, taxon == 'Primate', captivity == 'Natural')$fileid
+primates.natural <- subset_archive(fileids = natural.fileids, return.intxdata.only = TRUE)
+
+
+## Option 2 - using 'column' and 'values'
+primates.captive <- subset_archive(column = list('taxon', 'captivity'), values = list('Primate', 'Captive'), return.intxdata.only = T)
+
+primates.natural <- subset_archive(column = list('taxon', 'captivity'), values = list('Primate', 'Natural'), return.intxdata.only = T)
+
+
+```
+
+Now that we have extracted matrices for primates in captivity and in the wild, we 
+are ready to extract some features from the matrices. Here we extract the group size
+and the directional consistency index.
+
+```{r}
+captivity <- data.frame(dci = purrr::map_dbl(primates.captive, compete::dci),
+                        num.ids = purrr::map_dbl(primates.captive, nrow))
+
+natural <- data.frame(dci = purrr::map_dbl(primates.natural, compete::dci),
+                        num.ids = purrr::map_dbl(primates.natural, nrow))
+
+```
+
+Finally, let's plot the relationship between these variables. 
+
+```{r}
+
+plot(captivity$num.ids, captivity$dci, col = 'darkorchid4', pch = 16, 
+     xlab = 'Number of individuals', ylab = 'Directional Consistency Index')
+captivity.coefs <- lm(data = captivity, dci ~ num.ids)$coefficients
+abline(a = captivity.coefs[1], b = captivity.coefs[2], col = 'darkorchid4', lwd = 2)
+
+points(natural$num.ids, natural$dci, col = 'firebrick', pch = 16)
+natural.coefs <- lm(data = natural, dci ~ num.ids)$coefficients
+abline(a = natural.coefs[1], b = natural.coefs[2], col = 'firebrick', lwd = 2)
+legend(pch = 16, legend = c('Captive', 'Natural'), col = c('darkorchid4', 'firebrick'), x = 'bottomright')
+
+```
+
 
 ## References
 Schjelderup-Ebbe, T. (1922). Beitrage zur sozialpsychologie des haushuhns. Zeitschrift Fur Psychologie Und Physiologie Der Sinnesorgane, 88, 225–252.
