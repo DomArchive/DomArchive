@@ -55,7 +55,7 @@ Here is a summary of the metadata associated with each datafile:
 |Metadata Column| Meaning                           | Potential values
 |---------------|-----------------------------------|-----------------
 |fileid         | Unique identifier for data        |
-|taxon          | Order                             |
+|order          | Order (taxonomic rank)            |
 |species        | Species name                      |
 |common_name    | Common name                       |
 |study_site     | Nation where study was conducted  |
@@ -63,8 +63,8 @@ Here is a summary of the metadata associated with each datafile:
 |sex            | Males, females, or both?          | "M", "F", "MF"
 |age            | What age classes                  | "Adult", "Non-Adult", "Mixed"
 |measure        | What behavior was measured?       |
-|matrix_location|                                   |
-|countbinary    | Are data raw counts or binary?    | "count", "binary"
+|matrix_location| Where is data in reference (e.g., Tb1)          |
+|countbinary    | Are data raw counts or binary?    | "Count", "Binary"
 |groupid        | Unique identifier for social group|
 
 Additionally, metadata includes some quantities calculated from the interaction data. 
@@ -92,7 +92,7 @@ those fileids.
 
 2. Users can provide a list of column names and a list of values to be matched in those columns. 
 `subset_archive()` will return all rows where the column includes the provided values. To specify multiple
-restriction criteria, users can provide`column` and `value` as lists, and the
+restriction criteria, users can provide `column` and `value` as lists, and the
 each column is matched to the corresponding value(s) (i.e., check that for each row `column[n] %in% values[n]`).
 
 If both `fileids` and `column`/`values` are supplied, only `fileids` will be used. 
@@ -114,24 +114,24 @@ might be influenced by group size, so we will want to control for group size in 
 analysis. For this example we will use the matrix data directly, although 
 this information is already contained in `dom.metadata`. 
 
-First, we will restrict the dataset to only primates using the `taxon` column. Here we
+First, we will restrict the dataset to only primates using the `order` column. Here we
 do this with `subset_archive()` using both approaches described above. 
 
 ```{r}
 ## Option 1 - using fileids
-captive.fileids <- dplyr::filter(dom.metadata, taxon == 'Primate', captivity == 'Captive')$fileid
+captive.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Captive')$fileid
 primates.captive <- subset_archive(fileids = captive.fileids, return.intxdata.only = TRUE)
-natural.fileids <- dplyr::filter(dom.metadata, taxon == 'Primate', captivity == 'Natural')$fileid
+natural.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Natural')$fileid
 primates.natural <- subset_archive(fileids = natural.fileids, return.intxdata.only = TRUE)
 
 
 ## Option 2 - using 'column' and 'values'
-primates.captive <- subset_archive(column = list('taxon', 'captivity'),
-                                   values = list('Primate', 'Captive'),
+primates.captive <- subset_archive(column = list('order', 'captivity'),
+                                   values = list('Primates', 'Captive'),
                                    return.intxdata.only = T)
 
-primates.natural <- subset_archive(column = list('taxon', 'captivity'),
-                                   values = list('Primate', 'Natural'),
+primates.natural <- subset_archive(column = list('order', 'captivity'),
+                                   values = list('Primates', 'Natural'),
                                    return.intxdata.only = T)
 
 
@@ -139,7 +139,9 @@ primates.natural <- subset_archive(column = list('taxon', 'captivity'),
 
 Now that we have extracted matrices for primates in captivity and in the wild, we 
 are ready to extract some features from the matrices. Here we extract the group size
-and the directional consistency index.
+and the directional consistency index. To calculate the directional consisitency index, 
+we will use the `dci()` function in the `compete` R package. To install `compete`, run
+`devtools::install_github("jalapic/compete")`
 
 ```{r}
 captivity <- data.frame(dci = purrr::map_dbl(primates.captive, compete::dci),
@@ -154,16 +156,17 @@ Finally, let's plot the relationship between these variables.
 
 ```{r, fig.align='center', fig.height=4, fig.width= 6, echo = FALSE}
 mfrow = c(1,1)
-plot(captivity$num.ids, captivity$dci, col = 'darkorchid4', pch = 16, 
+plot(captivity$num.ids, captivity$dci, col = '#f5a51b', pch = 16, 
      xlab = 'Number of individuals', ylab = 'Directional Consistency Index')
 captivity.coefs <- lm(data = captivity, dci ~ num.ids)$coefficients
-abline(a = captivity.coefs[1], b = captivity.coefs[2], col = 'darkorchid4', lwd = 2)
+abline(a = captivity.coefs[1], b = captivity.coefs[2], col = '#f5a51b', lwd = 2)
 
-points(natural$num.ids, natural$dci, col = 'firebrick', pch = 16)
+points(natural$num.ids, natural$dci, col = '#4287f5', pch = 16)
 natural.coefs <- lm(data = natural, dci ~ num.ids)$coefficients
-abline(a = natural.coefs[1], b = natural.coefs[2], col = 'firebrick', lwd = 2)
+abline(a = natural.coefs[1], b = natural.coefs[2], col = '#4287f5', lwd = 2)
 legend(pch = 16, legend = c('Captive', 'Natural'),
-       col = c('darkorchid4', 'firebrick'), x = 'bottomright')
+       col = c('#f5a51b', '#4287f5'), x = 'bottomright')
+
 
 ```
 
@@ -176,7 +179,7 @@ version 0.1. https://github.com/jalapic/compete
 
 3. Van Hooff, J., Wensing J.A.B. (1987). Dominance and its behavioural measures in a captive wolf pack. In: Frank H.W., editor. Man and Wolf. Dordrecht, Olanda (Netherlands): Junk Publishers pp.219-252.
 
-4. , D., & McDonald, D. B. (2012). A social network perspective on measurements of dominance hierarchies. Animal Behaviour, 83(4), 925–934. http://dx.doi.org/10.1016/j.anbehav.2012.01.011
+4. Shizuka, D., & McDonald, D. B. (2012). A social network perspective on measurements of dominance hierarchies. Animal Behaviour, 83(4), 925–934. http://dx.doi.org/10.1016/j.anbehav.2012.01.011
 
 5. de Vries, H., Stevens, J. M. G., & Vervaecke, H. (2006). Measuring and testing the steepness of dominance hierarchies. Animal Behaviour, 71(3), 585–592. http://webhost.ua.ac.be/crc/pdfs/DeVriesAB2006.pdf
 
