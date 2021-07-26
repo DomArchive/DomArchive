@@ -63,9 +63,14 @@ Here is a summary of the metadata associated with each datafile:
 |sex            | Males, females, or both?          | "M", "F", "MF"
 |age            | What age classes                  | "Adult", "Non-Adult", "Mixed"
 |measure        | What behavior was measured?       |
-|matrix_location| Where is data in reference (e.g., Tb1)          |
+|data_location  | Where is data in reference (e.g., Tb1)          |
 |countbinary    | Are data raw counts or binary?    | "Count", "Binary"
+|repeat_group   | Are there multiple datasets for this group? | "Yes", "No
 |groupid        | Unique identifier for social group|
+|matrix_edgelist| Are data in matrix or edgelist    | "Matrix", "Edgelist"
+|edgelist_time_meaning | For edgelist data, what is the meaning (units) of the "time" column |
+|note           | Miscellaneous notes               |
+|full_citation  | Source for the data               |
 
 Additionally, metadata includes some quantities calculated from the interaction data. 
 Calculations were made using functions in the `compete` package (https://github.com/jalapic/compete). 
@@ -75,11 +80,11 @@ Calculations were made using functions in the `compete` package (https://github.
 |number_individuals          | Number of individuals in the data
 |number_interactions         | Number of interactions in the data
 |interactions_per_individual | Number of interactions per individual
-|proportion_unknown          | Proportion of relationships for which there are no observations
-|dci                         | Directional consistency index (Van Hooff & Wensing 1987)
-|ttri                        | Triangle transitivity index (Shizuka & McDonald 2012)
-|ds_steepness                | Hierarchy steepness calculated from David's Scores (de Vries et al 2006)
-|modified_landaus_h          | Modified Landau's h` measure of linearity (de Vries 1995)
+|proportion_unknown          | Proportion of relationships for which there are no observations (matrix data only)
+|dci                         | Directional consistency index (Van Hooff & Wensing 1987) (count matrix data only)
+|ttri                        | Triangle transitivity index (Shizuka & McDonald 2012) (matrix data only)
+|ds_steepness                | Hierarchy steepness calculated from David's Scores (de Vries et al 2006) (count matrix data only)
+|modified_landaus_h          | Modified Landau's h` measure of linearity (de Vries 1995) (matrix data only)
 
 ## Subsetting the archive using `subset_archive()`
 
@@ -111,27 +116,30 @@ Here we are interested in how directional consistency differs between natural pr
 groups and wild primate groups. Does housing primates in captivity influence the 
 structure of social hierarchies? We have an intuition that directional consistency
 might be influenced by group size, so we will want to control for group size in our 
-analysis. For this example we will use the matrix data directly, although 
-this information is already contained in `dom.metadata`. 
+analysis. Furthermore, directional consistency is ill-defined for binary data
+(e.g., A beat B more than vice-versa),
+and is also not easily applied to edgelist data that spans large periods with demographic
+turnover. For this example we will use the matrix data to calculate DCI directly, although 
+this information is already provided in `dom.metadata`. 
 
 First, we will restrict the dataset to only primates using the `order` column. Here we
 do this with `subset_archive()` using both approaches described above. 
 
 ```{r}
 ## Option 1 - using fileids
-captive.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Captive')$fileid
+captive.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Captive' & countbinary == 'Count' & matrix_edgelist == 'Matrix')$fileid
 primates.captive <- subset_archive(fileids = captive.fileids, return.intxdata.only = TRUE)
-natural.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Natural')$fileid
+natural.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Natural' & countbinary == 'Count' & matrix_edgelist == 'Matrix')$fileid
 primates.natural <- subset_archive(fileids = natural.fileids, return.intxdata.only = TRUE)
 
 
 ## Option 2 - using 'column' and 'values'
-primates.captive <- subset_archive(column = list('order', 'captivity'),
-                                   values = list('Primates', 'Captive'),
+primates.captive <- subset_archive(column = list('order', 'captivity', 'countbinary', 'matrix_edgelist'),
+                                   values = list('Primates', 'Captive', 'Count', 'Matrix'),
                                    return.intxdata.only = T)
 
-primates.natural <- subset_archive(column = list('order', 'captivity'),
-                                   values = list('Primates', 'Natural'),
+primates.natural <- subset_archive(column = list('order', 'captivity', 'countbinary', 'matrix_edgelist'),
+                                   values = list('Primates', 'Natural', 'Count', 'Matrix'),
                                    return.intxdata.only = T)
 
 
