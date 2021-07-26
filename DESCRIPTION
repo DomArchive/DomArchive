@@ -1,10 +1,12 @@
 Package: DomArchive
 Title: Archive of Published Dominance Data
-Version: 0.0.0.9000
+Version: 1.0
 Authors@R: 
   person("Strauss", "Eli", email = "straussed@gmail.com", role = c("aut", "cre"))
-  person("Shizuka", "Daizaburo", email = "dshizuka@unl.edu", role = c("aut", "cre"))
+  person("DeCasian", "Alex", role = c("art", "cre"))
+  person("Galando", "Gabriela", role = c("art", "cre")) 
   person("Hobson", "Elizabeth", email = "hobsoneh@ucmail.uc.edu", role = c("aut", "cre"))
+  person("Shizuka", "Daizaburo", email = "dshizuka@unl.edu", role = c("aut", "cre"))
   person("Curley", "James", email = "curley@utexas.edu", role = c("aut", "cre"))
 Description: This package provides an archive of published dominance data, as well as some utility functions for interacting with the data. 
 Depends: R (>= 3.5.2)
@@ -15,4 +17,6 @@ RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown
+Imports:
+    purrr
 VignetteBuilder: knitr

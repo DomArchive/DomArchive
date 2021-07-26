@@ -27,7 +27,8 @@ provides guidance on how to interact with the data objects in the R package.
 is a unique data entry, named after the first author and year of publication.
 Each element of the list contains two named elements -- `matrix` containing the 
 interaction sociomatrix and `metadata` containing the metadata associated with the 
-data. 
+data. In cases where data are in an edgelist rather than a matrix, the first named
+element is `edgelist` instead of `matrix`. 
 
 2. `dom.metadata` - a dataframe containing the metadata for the complete dataset. 
 The information in the `dom.metadata` dataframe is exactly identical to what you would get if you
@@ -64,10 +65,10 @@ Here is a summary of the metadata associated with each datafile:
 |age            | What age classes                  | "Adult", "Non-Adult", "Mixed"
 |measure        | What behavior was measured?       |
 |data_location  | Where is data in reference (e.g., Tb1)          |
-|countbinary    | Are data raw counts or binary?    | "Count", "Binary"
-|repeat_group   | Are there multiple datasets for this group? | "Yes", "No
+|countbinary    | Are data raw counts or binary? (edgelsts are counts) | "Count", "Binary"
+|repeat_group   | Are there multiple datasets for this group? | "Yes", "No"
 |groupid        | Unique identifier for social group|
-|matrix_edgelist| Are data in matrix or edgelist    | "Matrix", "Edgelist"
+|matrix_edgelist| Are data in matrix or edgelist format?    | "Matrix", "Edgelist"
 |edgelist_time_meaning | For edgelist data, what is the meaning (units) of the "time" column |
 |note           | Miscellaneous notes               |
 |full_citation  | Source for the data               |
