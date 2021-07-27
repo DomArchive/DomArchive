@@ -40,9 +40,9 @@ in the metadata or by supplying a list of fileids.
 subset_archive(fileids = c('SchjelderupEbbe_1922a', 'SchjelderupEbbe_1922b'))
 
 ## All data from captive primates
-subset_archive(columns = list('taxon', 'captivity'), values = list('Primate', 'Captive'))
+subset_archive(columns = list('order', 'captivity'), values = list('Primates', 'Captive'))
 
 #' ## All data from captive primates - subset using dom.metadata
-subset_archive(fileids = dom.metadata[dom.metadata$taxon == 'Primate' & dom.metadata$captivity == 'Captive',]$fileid)
+subset_archive(fileids = dom.metadata[dom.metadata$order == 'Primates' & dom.metadata$captivity == 'Captive',]$fileid)
 
 }
