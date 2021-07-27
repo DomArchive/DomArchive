@@ -1,0 +1,14 @@
+citHeader("To cite DomArchive in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "DomArchive: a century of a published dominance data",
+  author   = c("Eli D. Strauss", "Alex R. DeCasian", "Gabriela Galindo", "Elizabeth A. Hobson", "Daizaburo Shizuka", "James P. Curley"),
+  journal  = "Philosophical Transactions of the Royal Society, B",
+  year     = "in review",
+  volume   = "",
+  number   = "",
+  pages    = "",
+  url      = "https://github.com/DomArchive/DomArchive",
+  textVersion = "Strauss ED, DeCasian AR, Galindo G, Hobson EA, Shizuka D, Curley JP (in review). DomArchive: a century of a published dominance data. Philosophical Transactions of the Royal Society, B."
+)

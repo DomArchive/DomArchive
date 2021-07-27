@@ -62,10 +62,10 @@ Here is a summary of the metadata associated with each datafile:
 |study_site     | Nation where study was conducted  |
 |captivity      | Captive or free-ranging animals?  | "Captive", "Natural"
 |sex            | Males, females, or both?          | "M", "F", "MF"
-|age            | What age classes                  | "Adult", "Non-Adult", "Mixed"
+|age            | What age classes?                  | "Adult", "Non-Adult", "Mixed"
 |measure        | What behavior was measured?       |
-|data_location  | Where is data in reference (e.g., Tb1)          |
-|countbinary    | Are data raw counts or binary? (edgelsts are counts) | "Count", "Binary"
+|data_location  | Where is data in reference (e.g., Tb1)?          |
+|countbinary    | Are data raw counts or binary? (edgelists are counts) | "Count", "Binary"
 |repeat_group   | Are there multiple datasets for this group? | "Yes", "No"
 |groupid        | Unique identifier for social group|
 |matrix_edgelist| Are data in matrix or edgelist format?    | "Matrix", "Edgelist"
@@ -78,8 +78,8 @@ Calculations were made using functions in the `compete` package (https://github.
 
 |Quantity                    | Details                           
 |----------------------------|------------------------------------
-|number_individuals          | Number of individuals in the data
-|number_interactions         | Number of interactions in the data
+|number_individuals          | Number of individuals in the dataset
+|number_interactions         | Number of interactions in the dataset
 |interactions_per_individual | Number of interactions per individual
 |proportion_unknown          | Proportion of relationships for which there are no observations (matrix data only)
 |dci                         | Directional consistency index (Van Hooff & Wensing 1987) (count matrix data only)
