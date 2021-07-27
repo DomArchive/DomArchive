@@ -1,14 +1,23 @@
-#' dom.data
+#' Dominance interaction data and metadata
 #' 
-#' List of dominance matrices and associated metadata. List is organized such that
-#' the 1st dominance matrix corresponds to the 1st entry in the other elements of the list,
-#' and so on. 
+#' A list containing both data and metadata. Each element of the list
+#' is a unique data entry, named after the first author and year of publication.
+#' Each element of the list contains two named elements -- \code{matrix} containing the 
+#' interaction sociomatrix and \code{metadata} containing the metadata associated with the 
+#' data. In cases where data are in an edgelist rather than a matrix, the first named
+#' element is \code{edgelist} instead of \code{matrix}. 
+
 #' 
-#' @format List of 16 elements
+#' @format List containing data and metadata for each dataset.
 #'   \describe{
-#'     \item{matrix}{List of matrices of dominance interactions}
-#'     \item{fileid}{File identifier associated with each matrix. Format is Author_Year}
-#'     \item{taxon}{Broad taxonomic category for species}
-#'     \item{and so on}{...}
+#'     \item{matrix}{Sociomatrix of interactions, with winners on the rows and losers on the columns.
+#'     Only present if data are in matrix format (indicated in \code{matrix_edgelist} column in metadata)}
+#'     \item{edgelist}{Data frame of dominance interactions, with \code{sequence}, \code{winner}, 
+#'     \code{loser}, and (optional) \code{time} column.
+#'     Only present if data are in edgelist format (indicated in \code{matrix_edgelist} column in metadata).
+#'     Units of the \code{time} column are indicated in the \code{edgelist_time_meaning column} in the metadata.}
+#'     \item{metadata}{Metadata associated with this dataset. This information is identical to what 
+#'     is found in \code{dom.metadata}.}
+#'     
 #'   }
 "dom.data"
