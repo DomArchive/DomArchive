@@ -153,6 +153,10 @@ we will use the `dci()` function in the `compete` R package. To install `compete
 `devtools::install_github("jalapic/compete")`
 
 ```{r}
+## Install compete if not available
+if(!"compete" %in% rownames(installed.packages()))
+  devtools::install_github("jalapic/compete")
+
 captivity <- data.frame(dci = purrr::map_dbl(primates.captive, compete::dci),
                         num.ids = purrr::map_dbl(primates.captive, nrow))
 
