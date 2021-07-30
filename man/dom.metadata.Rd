@@ -3,7 +3,7 @@
 \docType{data}
 \name{dom.metadata}
 \alias{dom.metadata}
-\title{Metadata dataframe}
+\title{Dataframe of metadata}
 \format{
 Data frame of metadata with one row per dataset in the archive.
 Data frame includes biological metadata and summary statistics associated with
