@@ -159,8 +159,8 @@ we will use the `dci()` function in the `compete` R package. To install `compete
 ## Install compete if not available
 if(!"igraph" %in% rownames(installed.packages()))
   install.packages("igraph", repos = "http://cran.us.r-project.org")
-if(!"sna" %in% rownames(installed.packages()), repos = "http://cran.us.r-project.org")
-  install.packages("sna")
+if(!"sna" %in% rownames(installed.packages()))
+  install.packages("sna", repos = "http://cran.us.r-project.org")
 if(!"compete" %in% rownames(installed.packages()))
   install_version("compete", version = "0.1", repos = "http://cran.us.r-project.org")
 
