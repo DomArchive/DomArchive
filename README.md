@@ -10,7 +10,7 @@ contains 434 agonistic interaction datasets, totaling over 241,000 interactions.
 
 To install the package with the vignette, run (requires `devtools` package):  
 
-`devtools::install_github(‘DomArchive/DomArchive', build_vignettes = TRUE)`    
+`devtools::install_github("DomArchive/DomArchive", build_vignettes = TRUE)`    
 
 To view an introductory vignette about how to use the package, run:  
 
