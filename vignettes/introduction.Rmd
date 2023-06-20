@@ -127,6 +127,9 @@ First, we will restrict the dataset to only primates using the `order` column. H
 do this with `subset_archive()` using both approaches described above. 
 
 ```{r}
+if(!"dplyr" %in% rownames(installed.packages()))
+  install.packages("dplyr", repos = "http://cran.us.r-project.org")
+
 ## Option 1 - using fileids
 captive.fileids <- subset(dom.metadata, order == 'Primates' & captivity == 'Captive' & countbinary == 'Count' & matrix_edgelist == 'Matrix')$fileid
 primates.captive <- subset_archive(fileids = captive.fileids, return.intxdata.only = TRUE)
@@ -154,8 +157,12 @@ we will use the `dci()` function in the `compete` R package. To install `compete
 
 ```{r}
 ## Install compete if not available
+if(!"igraph" %in% rownames(installed.packages()))
+  install.packages("igraph", repos = "http://cran.us.r-project.org")
+if(!"sna" %in% rownames(installed.packages()))
+  install.packages("sna", repos = "http://cran.us.r-project.org")
 if(!"compete" %in% rownames(installed.packages()))
-  devtools::install_github("jalapic/compete")
+  install_version("compete", version = "0.1", repos = "http://cran.us.r-project.org")
 
 captivity <- data.frame(dci = purrr::map_dbl(primates.captive, compete::dci),
                         num.ids = purrr::map_dbl(primates.captive, nrow))
